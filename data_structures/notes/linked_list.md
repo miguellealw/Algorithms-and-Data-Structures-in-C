@@ -23,22 +23,31 @@
     - `last_node = last_node->next;` - assign the next node to the current instance of the last_node. This will keep a reference to the current last_node. When the while loop breaks (the last node was reached) the last_node will point to the last node of the list.
 
 **3. After the last_node is found start assigning the data to the new node.**
-  - First allocate space for the string on the node. Since `temp_node->some_string` will contain the reference to the first character of the string then the size type type has to be `char *`. Allocate `sizeof(char) * 100);` bytes (1 byte * 100);
+  - First allocate space for the string on the node. Since `temp_node->some_string` will contain the reference to the first character of the string then the size type has to be `char *`. Allocate `sizeof(char) * 100);` bytes (1 byte * 100);
   - Assign the string (reference to the first character of the string) to the newly allocated space.
   - Allocate space for the char double pointer (pointer to string array)
-    - size allocated will be `2 * sizeof(char *)` (size of 2 pointers).
+    - size allocated will be `sizeof(char *)` (size of one pointer).
   - Then dereference double pointer to go the address of the array and allocate space for that array.
-    - Allocated space size will be `sizeof(char)` since it will 
+    - Allocated space size will be `sizeof(**double_ponter)` since it will be the size of the array. `**double_pointer` is just the size of the array.
+      - `**double_pointer` - the array itself since it is dereferenced twice.
+      - `*double_pointer` - the pointer to the first element of the array.
 
+**4. Set next node of the newly created now to NULL since the node will be appended to the end of the list.**
+   
+**5. Check if the node being created is the head**
+  - if it is, then assign the newly created node directly to the last_node(the head) of the list
+  - if it is not the head, assign the newly created node to the next pointer of the last_node
+  - return the temp_node (newly created node)
 ```c
 Node *add_node_end(Node *head, char *some_string, char **double_pointer)
 {
   // 1.
   Node *last_node = NULL;
   Node *temp_node = (Node *)malloc(sizeof(Node));
+  bool isHead = head == NULL;
 
   // 2.
-  if(head != NULL) 
+  if(!isHead) 
   {
     last_node = head;
     while(last_node->next != NULL)
@@ -48,17 +57,18 @@ Node *add_node_end(Node *head, char *some_string, char **double_pointer)
   }
 
   // 3.
-  temp_node->some_string = (char *)malloc(sizeof(char) * 100);
+  temp_node->some_string = malloc(sizeof(char) * 100);
   temp_node->some_string = some_string;
 
-  // 4.
-  temp_node->double_pointer = (char **)malloc(2 * sizeof(char *));
-  *temp_node->double_pointer = (char *)malloc(sizeof(char));
+  temp_node->double_pointer = malloc(sizeof(char *));
+  *temp_node->double_pointer = malloc(sizeof(**double_pointer));
   temp_node->double_pointer = double_pointer;
 
+  // 4.
   temp_node->next = NULL;
 
-  if(head == NULL)
+  // 5.
+  if(isHead)
     last_node = temp_node;
   else
     last_node->next = temp_node;
