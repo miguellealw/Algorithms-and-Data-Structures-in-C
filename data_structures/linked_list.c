@@ -36,6 +36,7 @@ int main(void)
   printf("Node found with some_string_2 being: %s\n", node_found->some_string);
 
   // delete node
+  // TODO: figure out when to delete deleted node from memory
   // node_deleted = delete_node(head, some_string_2);
   // printf("Node with string %s has been deleted", node_deleted->some_string);
 
@@ -104,8 +105,33 @@ Node *add_node_end(Node *head, char *some_string, char **double_pointer)
 
 Node *delete_node(Node *head, char *some_string)
 {
-  // find node to delete 
+  // save pointers to current node and previous node
+  Node *current = head;
+  Node *previous = NULL;
 
+  if(head == NULL)
+    return NULL;
+
+  while(strcmp(current->some_string, some_string) != 0)
+  {
+    // If the end of the list is reached without finding list node
+    if(current->next == NULL)
+      return NULL;
+
+    // save pointer of current node to previous var for next iteration
+    previous = current;
+    // move to next node 
+    current = current->next;
+  }
+
+  // if a match is found
+  // assign the next pointer of previous node to next pointer of current node
+  previous->next = current->next;
+
+  // TODO: delete current node from memory
+  // free(current);
+
+  return current;
 }
 
 /*
