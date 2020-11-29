@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+
 #include "./linked_list.h"
 
 int main(void)
@@ -18,32 +20,34 @@ int main(void)
   // add node
   // current = add_node_end(head, some_string, string_arr);
   add_node_end(head, some_string, string_arr);
+
   // current = add_node_end(head, some_string_2, string_arr_2);
   add_node_end(head, some_string_2, string_arr_2);
 
-  current = head;
-  while (current != NULL)
-  {
-    printf("Current node - some_string: %s \n", current->some_string);
-    current = current->next;
-  }
+  print_list(head, "Node Printed: %s \n");
 
   // TODO: test if node is added in between
+  //add_node_in(head, some_string, string_arr);
   // TODO: test if node is added at beginning of list
+  //add_node_begin(head, some_string2, string_arr_2);
 
   // find node
+  printf("\nSearching for node %s...\n", some_string_2);
   node_found = find_node(head, some_string_2);
-  printf("Node found with some_string_2 being: %s\n", node_found->some_string);
+  printf("Node Found!: %s\n", node_found->some_string);
 
   // delete node
   // TODO: figure out when to delete deleted node from memory
   node_deleted = delete_node(head, some_string_2);
-  printf("Node with string %s has been deleted\n", node_deleted->some_string);
+  printf("\nNode with string \"%s\" has been deleted\n", node_deleted->some_string);
 
   // Confirm node has been deleted
   node_found = find_node(head, some_string_2);
   if(node_found == NULL)
-    printf("Node with string %s was deleted successfully!\n", some_string_2);
+  {
+    printf("\nNode Not Found...\n");
+    printf("Node with string \"%s\" was deleted successfully!\n", some_string_2);
+  }
 
   // TODO: free linked list from memory
 
@@ -54,34 +58,28 @@ Node *add_node_end(Node *head, char *some_string, char **double_pointer)
 {
   Node *last_node = NULL;
   Node *temp_node = (Node *)malloc(sizeof(Node));
+  bool isHead = head == NULL;
 
-  // Get reference to last node in list
-  if(head != NULL)
+  if(!isHead)
   {
     last_node = head;
-    // if head is NOT NULL then node being created is NOT the head
-    // In this case go to the last node of the list
-    /*
-      * When the next node is NULL it means it is the last node on the list.
-      * Once the next element is NULL, then stay on the current node and assign next node info on current->next   
-   */
     while(last_node->next != NULL)
     {
       last_node = last_node->next;
     }
   }
 
-  temp_node->some_string = (char *)malloc(sizeof(char) * 100);
+  temp_node->some_string = malloc(sizeof(char) * 100);
   temp_node->some_string = some_string;
 
-  temp_node->double_pointer = (char **)malloc(2 * sizeof(char *));
-  *temp_node->double_pointer = (char *)malloc(sizeof(**double_pointer));
+  temp_node->double_pointer = malloc(sizeof(char *));
+  *temp_node->double_pointer = malloc(sizeof(**double_pointer));
   temp_node->double_pointer = double_pointer;
 
   temp_node->next = NULL;
   
   // check whether the node created was the head
-  if(head == NULL)
+  if(isHead)
     last_node = temp_node;
   else
     last_node->next = temp_node;
@@ -136,4 +134,17 @@ Node *find_node(Node *head, char *some_string)
   }
 
   return NULL;
+}
+
+void print_list(Node *head, char* message)
+{
+  Node *current = head;
+
+  while(current != NULL)
+  {
+    // printf("Node printed: %s \n", current->some_string);
+    printf(message, current->some_string);
+    current = current->next;
+  }
+
 }
