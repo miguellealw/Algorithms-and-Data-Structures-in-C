@@ -37,44 +37,26 @@ int main(void)
 
   // delete node
   // TODO: figure out when to delete deleted node from memory
-  // node_deleted = delete_node(head, some_string_2);
-  // printf("Node with string %s has been deleted", node_deleted->some_string);
+  node_deleted = delete_node(head, some_string_2);
+  printf("Node with string %s has been deleted\n", node_deleted->some_string);
 
   // Confirm node has been deleted
-  // node_found = find_node(head, some_string_2);
-  // if(node_found == NULL)
-  //   printf("Node with string %s was deleted.", some_string_2);
+  node_found = find_node(head, some_string_2);
+  if(node_found == NULL)
+    printf("Node with string %s was deleted successfully!\n", some_string_2);
 
   // TODO: free linked list from memory
+
+  return EXIT_SUCCESS;
 }
 
 Node *add_node_end(Node *head, char *some_string, char **double_pointer)
 {
-  /*
-    * allocate memory for new node
-      * make a temp node that is used as the new node being created
-    
-    * get reference to last element in list
-      * assign data to temp node
-      * assign temp->next to NULL since the node will be added to the end of list
-      * 
-      * if head is NULL.
-        * If it is then assign temp to node to head
-        * return head
-      * if head is NOT NULL
-        * Assign current->next = temp
-        * return temp 
-  */
   Node *last_node = NULL;
   Node *temp_node = (Node *)malloc(sizeof(Node));
 
   // Get reference to last node in list
-  if(head == NULL)
-  {
-    // if head is NULL then node being created is the head
-    last_node = (Node *)malloc(sizeof(Node));
-  }
-  else
+  if(head != NULL)
   {
     last_node = head;
     // if head is NOT NULL then node being created is NOT the head
@@ -93,14 +75,18 @@ Node *add_node_end(Node *head, char *some_string, char **double_pointer)
   temp_node->some_string = some_string;
 
   temp_node->double_pointer = (char **)malloc(2 * sizeof(char *));
-  *temp_node->double_pointer = (char *)malloc(sizeof(char));
+  *temp_node->double_pointer = (char *)malloc(sizeof(**double_pointer));
   temp_node->double_pointer = double_pointer;
 
   temp_node->next = NULL;
+  
+  // check whether the node created was the head
+  if(head == NULL)
+    last_node = temp_node;
+  else
+    last_node->next = temp_node;
 
-  last_node->next = temp_node;
-
-  return last_node->next;
+  return temp_node;
 }
 
 Node *delete_node(Node *head, char *some_string)
