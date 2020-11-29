@@ -1,2 +1,4 @@
 /data_structures/obj/*.o
 /data_structures/*.exe
+
+/data_structures/linked_list
