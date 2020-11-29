@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "./linked_list.h"
 
 int main(void)
@@ -23,7 +24,7 @@ int main(void)
   current = head;
   while (current != NULL)
   {
-    printf("Some string: %s \n", current->some_string);
+    printf("Current node - some_string: %s \n", current->some_string);
     current = current->next;
   }
 
@@ -31,7 +32,8 @@ int main(void)
   // TODO: test if node is added at beginning of list
 
   // find node
-  // node_found = find_node(head, some_string_2);
+  node_found = find_node(head, some_string_2);
+  printf("Node found with some_string_2 being: %s\n", node_found->some_string);
 
   // delete node
   // node_deleted = delete_node(head, some_string_2);
@@ -41,6 +43,8 @@ int main(void)
   // node_found = find_node(head, some_string_2);
   // if(node_found == NULL)
   //   printf("Node with string %s was deleted.", some_string_2);
+
+  // TODO: free linked list from memory
 }
 
 Node *add_node_end(Node *head, char *some_string, char **double_pointer)
@@ -95,13 +99,13 @@ Node *add_node_end(Node *head, char *some_string, char **double_pointer)
 
   last_node->next = temp_node;
 
-  // free(temp_node);
-
   return last_node->next;
 }
 
 Node *delete_node(Node *head, char *some_string)
 {
+  // find node to delete 
+
 }
 
 /*
@@ -109,4 +113,15 @@ Node *delete_node(Node *head, char *some_string)
 */
 Node *find_node(Node *head, char *some_string)
 {
+  Node *current = head;
+
+  while(current != NULL)
+  {
+    if(strcmp(current->some_string, some_string) == 0) 
+      return current;
+
+    current = current->next;
+  }
+
+  return NULL;
 }
