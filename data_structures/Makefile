@@ -1,5 +1,5 @@
 CC = gcc
-CLFLAGS = -Wall 
+CLFLAGS = -Wall -Wl
 DEPS = linked_list.h
 
 ODIR = obj
@@ -22,7 +22,7 @@ $(ODIR)/%.o: %.c $(DEPS)
 
 # make rule for linked list file
 linked_list: $(OBJ)
-	$(CC) $(CFLAGS) -g -o $@ $^
+	$(CC) $(CFLAGS) -g -o $@.out $^
 
 binary_tree: $(OBJ)
 	$(CC) $(CFLAGS) -o $@ $^
