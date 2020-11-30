@@ -13,8 +13,13 @@ int main(void)
   char *some_string_2 = "String 2";
 
   char *string_of_node_to_delete = "Third node added to end of list."; 
+  unsigned int ID_of_node_to_delete = 2;
 
   Node *head, *current, *node_found, *node_deleted;
+
+  printf("\n*****************\n");
+  printf("Add to END of List");
+  printf("\n*****************\n");
 
   // add head of list
   head = add_node_end(NULL, "Head of list", string_arr);
@@ -23,18 +28,24 @@ int main(void)
   add_node_end(head, "Second node added to end of list.", string_arr);
   add_node_end(head, string_of_node_to_delete, string_arr_2);
 
-
-  print_list(head, "Node Printed: %s \n");
+  print_list(head, "#%d - Node Printed: %s \n");
 
   // TODO: test if node is added in between
   //add_node_in(head, some_string, string_arr);
-  // TODO: test if node is added at beginning of list
-  //head = add_node_begin(head, "Node added to beginning of list", string_arr_2);
-  //printf("New head added with string of: %s", head->some_string);
+  
+  printf("\n*****************\n");
+  printf("Add to BEGINNING of List");
+  printf("\n*****************\n");
+  head = add_node_begin(head, "Node added to beginning of list", string_arr_2);
+  printf("New head added with string of: %s and ID of: #%d\n", head->some_string, head->ID);
 
   // find node
-  printf("\nSearching for node \"%s\"...\n", string_of_node_to_delete);
-  node_found = find_node(head, string_of_node_to_delete);
+  printf("\n*****************\n");
+  printf("Find Node");
+  printf("\n*****************\n");
+
+  printf("Searching for node - \"%s\"...\n", string_of_node_to_delete);
+  node_found = find_node(head, ID_of_node_to_delete);
   if(node_found != NULL)
     printf("Node Found!: %s\n", node_found->some_string);
   else
@@ -42,20 +53,44 @@ int main(void)
 
   // delete node
   // TODO: figure out when to delete deleted node from memory
-  node_deleted = delete_node(head, string_of_node_to_delete);
-  printf("\nNode with string \"%s\" has been deleted\n", node_deleted->some_string);
+  printf("\n*****************\n");
+  printf("Delete Node");
+  printf("\n*****************\n");
+  node_deleted = delete_node(head, ID_of_node_to_delete);
+  printf("Node with string \"%s\" and ID: %d has been deleted\n", node_deleted->some_string, node_deleted->ID);
 
   // Confirm node has been deleted
-  node_found = find_node(head, string_of_node_to_delete);
+  node_found = find_node(head, ID_of_node_to_delete);
   if(node_found == NULL)
   {
-    printf("\nNode Not Found...\n");
-    printf("Node with string \"%s\" was deleted successfully!\n", string_of_node_to_delete);
+    printf("\nConfirming Deletion...\n");
+    printf("Node with string \"%s\" and ID: %d was deleted successfully!\n", string_of_node_to_delete, ID_of_node_to_delete);
   }
 
   // TODO: free linked list from memory
 
   return EXIT_SUCCESS;
+}
+
+Node *create_node(Node* head, char *some_string, char **double_pointer)
+{
+  Node *temp_node = malloc(sizeof(Node));
+
+  // Assign ID to node
+  // TODO: figure out how to handle ID's when nodes are added in between and at start of list 
+  unsigned int list_length = length(head);
+  temp_node->ID = list_length;
+
+  temp_node->some_string = malloc(sizeof(char) * 100);
+  temp_node->some_string = some_string;
+
+  temp_node->double_pointer = malloc(sizeof(char *));
+  *temp_node->double_pointer = malloc(sizeof(**double_pointer));
+  temp_node->double_pointer = double_pointer;
+
+  temp_node->next = NULL;
+
+  return temp_node;
 }
 
 /*
@@ -70,9 +105,11 @@ int main(void)
 Node *add_node_end(Node *head, char *some_string, char **double_pointer)
 {
   Node *last_node = NULL;
-  Node *temp_node = (Node *)malloc(sizeof(Node));
   bool isHead = head == NULL;
 
+  Node *new_node = create_node(head, some_string, double_pointer);
+  
+  // If the node being added is not the head then go to the end of the list 
   if(!isHead)
   {
     last_node = head;
@@ -82,22 +119,13 @@ Node *add_node_end(Node *head, char *some_string, char **double_pointer)
     }
   }
 
-  temp_node->some_string = malloc(sizeof(char) * 100);
-  temp_node->some_string = some_string;
-
-  temp_node->double_pointer = malloc(sizeof(char *));
-  *temp_node->double_pointer = malloc(sizeof(**double_pointer));
-  temp_node->double_pointer = double_pointer;
-
-  temp_node->next = NULL;
-  
   // check whether the node created was the head
   if(isHead)
-    last_node = temp_node;
+    last_node = new_node;
   else
-    last_node->next = temp_node;
+    last_node->next = new_node;
 
-  return temp_node;
+  return new_node;
 }
 
 /*
@@ -111,24 +139,39 @@ Node *add_node_end(Node *head, char *some_string, char **double_pointer)
 */
 Node *add_node_begin(Node *head, char *some_string, char **double_pointer)
 {
+  Node *new_node = create_node(head, some_string, double_pointer);
   // create new node
-  Node *temp_node = malloc(sizeof(Node));
+  /*Node *temp_node = malloc(sizeof(Node));*/
 
-  // Assign data to node
-  temp_node->some_string = malloc(sizeof(char) * 100);
-  temp_node->some_string = some_string;
+  /*// Assign data to node*/
+  /*temp_node->some_string = malloc(sizeof(char) * 100);*/
+  /*temp_node->some_string = some_string;*/
 
-  temp_node->double_pointer = malloc(sizeof(char *));
-  *temp_node->double_pointer = malloc(sizeof(**double_pointer));
-  temp_node->double_pointer = double_pointer;
+  /*temp_node->double_pointer = malloc(sizeof(char *));*/
+  /**temp_node->double_pointer = malloc(sizeof(**double_pointer));*/
+  /*temp_node->double_pointer = double_pointer;*/
 
-  // next node of new node is the the previous head.
-  temp_node->next = head;
+  /*// next node of new node is the the previous head.*/
+  new_node->next = head;
+  /*temp_node->next = head;*/
 
-  return temp_node;
+  /*return temp_node;*/
+  return new_node;
 }
 
-Node *delete_node(Node *head, char *some_string)
+Node *add_node_in(Node *head, int index, char *some_string, char **double_pointer)
+{
+  // create node
+  // assign data to node
+
+  // get previous node
+  // get next node
+
+  // assign next of previous node to new node
+  // assign next of new node to next node
+}
+
+Node *delete_node(Node *head, unsigned int ID)
 {
   // save pointers to current node and previous node
   Node *current = head;
@@ -137,7 +180,7 @@ Node *delete_node(Node *head, char *some_string)
   if(head == NULL)
     return NULL;
 
-  while(strcmp(current->some_string, some_string) != 0)
+  while(current->ID != ID)
   {
     // If the end of the list is reached without finding list node
     if(current->next == NULL)
@@ -159,13 +202,13 @@ Node *delete_node(Node *head, char *some_string)
   return current;
 }
 
-Node *find_node(Node *head, char *some_string)
+Node *find_node(Node *head, unsigned int ID)
 {
   Node *current = head;
 
   while(current != NULL)
   {
-    if(strcmp(current->some_string, some_string) == 0) 
+    if(current->ID == ID) 
       return current;
 
     current = current->next;
@@ -174,15 +217,34 @@ Node *find_node(Node *head, char *some_string)
   return NULL;
 }
 
+
 void print_list(Node *head, char* message)
 {
   Node *current = head;
 
   while(current != NULL)
   {
-    // printf("Node printed: %s \n", current->some_string);
-    printf(message, current->some_string);
+    printf(message, current->ID, current->some_string);
     current = current->next;
   }
 
 }
+
+unsigned int length(Node *head)
+{
+  if(head == NULL)
+    return 0;
+
+  Node *current = head;  
+  int counter = 0; 
+
+  while(current != NULL)
+  {
+    counter++;    
+    current = current->next;
+  }
+
+  return counter;
+}
+
+
