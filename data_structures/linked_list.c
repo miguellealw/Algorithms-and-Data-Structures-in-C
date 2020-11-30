@@ -12,41 +12,45 @@ int main(void)
   char *some_string = "Hello, World";
   char *some_string_2 = "String 2";
 
+  char *string_of_node_to_delete = "Third node added to end of list."; 
+
   Node *head, *current, *node_found, *node_deleted;
 
   // add head of list
-  head = add_node_end(NULL, some_string, string_arr);
+  head = add_node_end(NULL, "Head of list", string_arr);
 
   // add node
-  // current = add_node_end(head, some_string, string_arr);
-  add_node_end(head, some_string, string_arr);
+  add_node_end(head, "Second node added to end of list.", string_arr);
+  add_node_end(head, string_of_node_to_delete, string_arr_2);
 
-  // current = add_node_end(head, some_string_2, string_arr_2);
-  add_node_end(head, some_string_2, string_arr_2);
 
   print_list(head, "Node Printed: %s \n");
 
   // TODO: test if node is added in between
   //add_node_in(head, some_string, string_arr);
   // TODO: test if node is added at beginning of list
-  //add_node_begin(head, some_string2, string_arr_2);
+  //head = add_node_begin(head, "Node added to beginning of list", string_arr_2);
+  //printf("New head added with string of: %s", head->some_string);
 
   // find node
-  printf("\nSearching for node %s...\n", some_string_2);
-  node_found = find_node(head, some_string_2);
-  printf("Node Found!: %s\n", node_found->some_string);
+  printf("\nSearching for node \"%s\"...\n", string_of_node_to_delete);
+  node_found = find_node(head, string_of_node_to_delete);
+  if(node_found != NULL)
+    printf("Node Found!: %s\n", node_found->some_string);
+  else
+    printf("Node was not found! find_node function not working properly");
 
   // delete node
   // TODO: figure out when to delete deleted node from memory
-  node_deleted = delete_node(head, some_string_2);
+  node_deleted = delete_node(head, string_of_node_to_delete);
   printf("\nNode with string \"%s\" has been deleted\n", node_deleted->some_string);
 
   // Confirm node has been deleted
-  node_found = find_node(head, some_string_2);
+  node_found = find_node(head, string_of_node_to_delete);
   if(node_found == NULL)
   {
     printf("\nNode Not Found...\n");
-    printf("Node with string \"%s\" was deleted successfully!\n", some_string_2);
+    printf("Node with string \"%s\" was deleted successfully!\n", string_of_node_to_delete);
   }
 
   // TODO: free linked list from memory
@@ -54,6 +58,15 @@ int main(void)
   return EXIT_SUCCESS;
 }
 
+/*
+  Adds node to the end of the linked list and returns newly created node.
+
+  head: head of the node
+  some_string: string that belongs to node
+  double_pointer: pointer that points to an array that belongs to node
+
+  returns: newly created node
+*/
 Node *add_node_end(Node *head, char *some_string, char **double_pointer)
 {
   Node *last_node = NULL;
@@ -83,6 +96,34 @@ Node *add_node_end(Node *head, char *some_string, char **double_pointer)
     last_node = temp_node;
   else
     last_node->next = temp_node;
+
+  return temp_node;
+}
+
+/*
+  Adds node to the start of the linked list and returns newly created node.
+
+  head: head of the node
+  some_string: string that belongs to node
+  double_pointer: pointer that points to an array that belongs to node
+
+  returns: newly created node
+*/
+Node *add_node_begin(Node *head, char *some_string, char **double_pointer)
+{
+  // create new node
+  Node *temp_node = malloc(sizeof(Node));
+
+  // Assign data to node
+  temp_node->some_string = malloc(sizeof(char) * 100);
+  temp_node->some_string = some_string;
+
+  temp_node->double_pointer = malloc(sizeof(char *));
+  *temp_node->double_pointer = malloc(sizeof(**double_pointer));
+  temp_node->double_pointer = double_pointer;
+
+  // next node of new node is the the previous head.
+  temp_node->next = head;
 
   return temp_node;
 }
@@ -118,9 +159,6 @@ Node *delete_node(Node *head, char *some_string)
   return current;
 }
 
-/*
-  return NULL if node is not found otherwise return found node
-*/
 Node *find_node(Node *head, char *some_string)
 {
   Node *current = head;
