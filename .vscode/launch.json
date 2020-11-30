@@ -4,6 +4,25 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+  {
+    "name": "(gdb) Launch",
+    "type": "cppdbg",
+    "request": "launch",
+    "program": "${fileDirname}\\${fileBasenameNoExtension}.out",
+    "args": [],
+    "stopAtEntry": false,
+    "cwd": "${workspaceFolder}",
+    "environment": [],
+    "externalConsole": false,
+    "MIMode": "gdb",
+    "setupCommands": [
+        {
+            "description": "Enable pretty-printing for gdb",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+        }
+    ]
+  },
     {
       "name": "gcc.exe - Build and debug active file",
       "type": "cppdbg",
@@ -15,10 +34,7 @@
       "environment": [],
       "externalConsole": false,
       "MIMode": "gdb",
-      // Windows
-      // "miDebuggerPath": "C:\\MinGW\\bin\\gdb.exe",
-      // Linux
-      "miDebuggerPath": "/usr/bin/gdb",
+      "miDebuggerPath": "C:\\MinGW\\bin\\gdb.exe",
       "setupCommands": [
         {
           "description": "Enable pretty-printing for gdb",

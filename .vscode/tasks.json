@@ -3,7 +3,8 @@
     {
       "type": "cppbuild",
       "label": "C/C++: gcc.exe build active file",
-      "command": "C:\\MinGW\\bin\\gcc.exe",
+      // "command": "C:\\MinGW\\bin\\gcc.exe",
+      "command": "make linked_list",
       "args": [
         "-g",
         "${file}",
