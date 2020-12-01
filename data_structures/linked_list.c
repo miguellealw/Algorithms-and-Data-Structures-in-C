@@ -31,7 +31,11 @@ int main(void)
   print_list(head, "#%d - Node Printed: %s \n");
 
   // TODO: test if node is added in between
-  //add_node_in(head, some_string, string_arr);
+  printf("\n*****************\n");
+  printf("Add IN BETWEEN index %d and %d of List", 1, 2);
+  printf("\n*****************\n");
+  add_node_in(head, 1, "Node added in between", string_arr);
+  print_list(head, "#%d - Node Printed: %s\n");
   
   printf("\n*****************\n");
   printf("Add to BEGINNING of List");
@@ -139,36 +143,45 @@ Node *add_node_end(Node *head, char *some_string, char **double_pointer)
 */
 Node *add_node_begin(Node *head, char *some_string, char **double_pointer)
 {
-  Node *new_node = create_node(head, some_string, double_pointer);
   // create new node
-  /*Node *temp_node = malloc(sizeof(Node));*/
+  Node *new_node = create_node(head, some_string, double_pointer);
 
-  /*// Assign data to node*/
-  /*temp_node->some_string = malloc(sizeof(char) * 100);*/
-  /*temp_node->some_string = some_string;*/
+  // TODO: handle when head is NULL
 
-  /*temp_node->double_pointer = malloc(sizeof(char *));*/
-  /**temp_node->double_pointer = malloc(sizeof(**double_pointer));*/
-  /*temp_node->double_pointer = double_pointer;*/
-
-  /*// next node of new node is the the previous head.*/
+  // next node of new node is the the previous head.
   new_node->next = head;
-  /*temp_node->next = head;*/
 
-  /*return temp_node;*/
   return new_node;
 }
 
+// The node will be added AFTER the index passed in
 Node *add_node_in(Node *head, int index, char *some_string, char **double_pointer)
 {
+  // TODO: handle when head is NULL (When list is empty)
+
   // create node
-  // assign data to node
+  Node *new_node = create_node(head, some_string, double_pointer);
 
+  // get current node
+  Node *current = head;
   // get previous node
-  // get next node
-
+  Node *previous = NULL;
+  
+   while(current->ID != index)
+   {
+     if(current->next == NULL)
+      return NULL;
+      
+     previous = current;
+     current = current->next;
+   }
   // assign next of previous node to new node
+  previous->next = new_node; 
   // assign next of new node to next node
+  new_node->next = current;
+
+
+  return new_node;
 }
 
 Node *delete_node(Node *head, unsigned int ID)
