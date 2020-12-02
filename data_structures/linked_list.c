@@ -17,20 +17,28 @@ int main(void)
 
   Node *head, *current, *node_found, *node_deleted;
 
+  /*printf("\n*****************\n");*/
+  /*printf("Add Head to BEGINNING of List");*/
+  /*printf("\n*****************\n");*/
+  /*head = add_node_begin(NULL, "Head of list", string_arr);*/
+  /*print_list(head, "#%d - Node Printed: %s \n");*/
+
+  // add head of list
+  printf("\n*****************\n");
+  printf("Add Head to END of List");
+  printf("\n*****************\n");
+  head = add_node_end(NULL, "Head of list", string_arr);
+  print_list(head, "#%d - Node Printed: %s \n");
+
+  // add node
   printf("\n*****************\n");
   printf("Add to END of List");
   printf("\n*****************\n");
-
-  // add head of list
-  head = add_node_end(NULL, "Head of list", string_arr);
-
-  // add node
   add_node_end(head, "Second node added to end of list.", string_arr);
   add_node_end(head, string_of_node_to_delete, string_arr_2);
 
   print_list(head, "#%d - Node Printed: %s \n");
 
-  // TODO: test if node is added in between
   printf("\n*****************\n");
   printf("Add IN BETWEEN index %d and %d of List", 1, 2);
   printf("\n*****************\n");
@@ -41,18 +49,18 @@ int main(void)
   printf("\n*****************\n");
   printf("Add to BEGINNING of List");
   printf("\n*****************\n");
-  head = add_node_begin(head, "Node added to beginning of list", string_arr_2);
-  printf("New head added with string of: %s and ID of: #%d\n", head->some_string, head->ID);
+  Node *new_head = add_node_begin(head, "Node added to beginning of list", string_arr_2);
+  print_list(new_head, "#%d - Node Printed: %s\n");
 
   // find node
   printf("\n*****************\n");
   printf("Find Node");
   printf("\n*****************\n");
 
-  printf("Searching for node - \"%s\"...\n", string_of_node_to_delete);
+  printf("Searching for node with ID %d...\n", ID_of_node_to_delete);
   node_found = find_node(head, ID_of_node_to_delete);
   if(node_found != NULL)
-    printf("Node Found!: %s\n", node_found->some_string);
+    printf("Node with ID %d was found!\n", node_found->ID);
   else
     printf("Node was not found! find_node function not working properly");
 
@@ -110,25 +118,18 @@ Node *create_node(Node* head, char *some_string, char **double_pointer)
 Node *add_node_end(Node *head, char *some_string, char **double_pointer)
 {
   Node *last_node = NULL;
-  bool isHead = head == NULL;
-
   Node *new_node = create_node(head, some_string, double_pointer);
   
-  // If the node being added is not the head then go to the end of the list 
-  if(!isHead)
-  {
-    last_node = head;
-    while(last_node->next != NULL)
-    {
-      last_node = last_node->next;
-    }
-  }
+  // if node created is head there is no need to go to end of list
+  if(IS_EMPTY(head))
+    return new_node;
+  
+  // If the node created is not the head then go to the end of the list 
+  last_node = head;
+  while(last_node->next != NULL)
+    last_node = last_node->next;
 
-  // check whether the node created was the head
-  if(isHead)
-    last_node = new_node;
-  else
-    last_node->next = new_node;
+  last_node->next = new_node;
 
   return new_node;
 }
@@ -147,16 +148,17 @@ Node *add_node_begin(Node *head, char *some_string, char **double_pointer)
   // create new node
   Node *new_node = create_node(head, some_string, double_pointer);
 
-  // TODO: handle when head is NULL
-
-  // next node of new node is the the previous head.
-  new_node->next = head;
+  if(IS_EMPTY(head))
+    head = new_node;
+  else
+    // next node of new node is the the previous head.
+    new_node->next = head;
 
   return new_node;
 }
 
 // The node will be added AFTER the index passed in
-Node *add_node_in(Node *head, int index, char *some_string, char **double_pointer)
+Node *add_node_in(Node *head, unsigned int index, char *some_string, char **double_pointer)
 {
   // TODO: handle when head is NULL (When list is empty)
 
@@ -167,15 +169,17 @@ Node *add_node_in(Node *head, int index, char *some_string, char **double_pointe
   Node *current = head;
   // get previous node
   Node *previous = NULL;
-  
-   while(current->ID != index)
-   {
-     if(current->next == NULL)
-      return NULL;
-      
-     previous = current;
-     current = current->next;
-   }
+
+  index++; 
+  while(current->ID != index)
+  {
+   if(current->next == NULL)
+    return NULL;
+    
+   previous = current;
+   current = current->next;
+  }
+
   // assign next of previous node to new node
   previous->next = new_node; 
   // assign next of new node to next node
