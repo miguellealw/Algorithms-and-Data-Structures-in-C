@@ -1,7 +1,19 @@
 #ifndef LINKED_LIST_H
 #define LINKED_LIST_H
 
+#include <stdio.h>
+
 #define IS_EMPTY(x) (x == NULL)
+
+#define PRINT_MESSAGE(message)\
+  printf("\n*****************\n");\
+  printf("%s", message);\
+  printf("\n*****************\n");
+
+#define PRINTF_MESSAGE(message, arg1, arg2)\
+  printf("\n*****************\n");\
+  printf(message, arg1, arg2);\
+  printf("\n*****************\n");
 
 typedef struct Node
 {
@@ -26,5 +38,8 @@ Node *create_node(Node *head, char *some_string, char **double_pointer);
 unsigned int length(Node *head);
 
 void print_list(Node *head, char *message);
+
+
+// TODO: save pointer to head and tail of list
 
 #endif
