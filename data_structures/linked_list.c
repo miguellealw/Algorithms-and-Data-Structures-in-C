@@ -24,39 +24,26 @@ int main(void)
   /*print_list(head, "#%d - Node Printed: %s \n");*/
 
   // add head of list
-  printf("\n*****************\n");
-  printf("Add Head to END of List");
-  printf("\n*****************\n");
+  PRINT_MESSAGE("Add Head to END of List");
   head = add_node_end(NULL, "Head of list", string_arr);
   print_list(head, "#%d - Node Printed: %s \n");
 
   // add node
-  printf("\n*****************\n");
-  printf("Add to END of List");
-  printf("\n*****************\n");
+  PRINT_MESSAGE("Add to END of List");
   add_node_end(head, "Second node added to end of list.", string_arr);
   add_node_end(head, string_of_node_to_delete, string_arr_2);
-
   print_list(head, "#%d - Node Printed: %s \n");
 
-  printf("\n*****************\n");
-  printf("Add IN BETWEEN index %d and %d of List", 1, 2);
-  printf("\n*****************\n");
+  PRINTF_MESSAGE("Add IN BETWEEN index %d and %d of List", 1, 2);
   add_node_in(head, 1, "Node added in between", string_arr);
   print_list(head, "#%d - Node Printed: %s\n");
 
-  
-  printf("\n*****************\n");
-  printf("Add to BEGINNING of List");
-  printf("\n*****************\n");
+  PRINT_MESSAGE("Add to BEGINNING of List");
   Node *new_head = add_node_begin(head, "Node added to beginning of list", string_arr_2);
   print_list(new_head, "#%d - Node Printed: %s\n");
 
   // find node
-  printf("\n*****************\n");
-  printf("Find Node");
-  printf("\n*****************\n");
-
+  PRINT_MESSAGE("Find Node");
   printf("Searching for node with ID %d...\n", ID_of_node_to_delete);
   node_found = find_node(head, ID_of_node_to_delete);
   if(node_found != NULL)
@@ -66,9 +53,7 @@ int main(void)
 
   // delete node
   // TODO: figure out when to delete deleted node from memory
-  printf("\n*****************\n");
-  printf("Delete Node");
-  printf("\n*****************\n");
+  PRINT_MESSAGE("Delete Node");
   node_deleted = delete_node(head, ID_of_node_to_delete);
   printf("Node with string \"%s\" and ID: %d has been deleted\n", node_deleted->some_string, node_deleted->ID);
 
