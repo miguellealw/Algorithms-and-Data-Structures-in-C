@@ -10,9 +10,14 @@
   printf("%s", message);\
   printf("\n*****************\n");
 
-#define PRINTF_MESSAGE(message, arg1, arg2)\
+//#define PRINTF_MESSAGE(message, arg1, arg2)\
+  //printf("\n*****************\n");\
+  //printf(message, arg1, arg2);\
+  //printf("\n*****************\n");
+
+#define PRINTF_MESSAGE(func)\
   printf("\n*****************\n");\
-  printf(message, arg1, arg2);\
+  func;\
   printf("\n*****************\n");
 
 typedef struct Node
@@ -23,22 +28,23 @@ typedef struct Node
   struct Node *next;
 } Node;
 
+// Create Nodes
 Node *add_node_end(Node *head, char *some_string, char **double_pointer);
 Node *add_node_in(Node *head, unsigned int index, char *some_string, char **double_pointer);
 Node *add_node_begin(Node *head, char *some_string, char **double_pointer);
 
-Node *delete_node(Node *head, unsigned int ID);
-// TODO: add delete function from first and last node
+// Delete Node
+Node *delete_node_begin(Node **head);
+// FIXME: this function seg faults when head is deleted
+Node *delete_node_in(Node **head, unsigned int ID);
+// FIXME: this function seg faults
+Node *delete_node_end(Node **head);
 
-
+// Interface for list
 Node *find_node(Node *head, unsigned int ID);
-
 Node *create_node(Node *head, char *some_string, char **double_pointer);
-
 unsigned int length(Node *head);
-
 void print_list(Node *head, char *message);
-
 
 // TODO: save pointer to head and tail of list
 

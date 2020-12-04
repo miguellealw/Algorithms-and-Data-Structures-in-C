@@ -9,6 +9,9 @@
 - Node *find_node(Node *head, char *some_string);
 ---
 
+* Some Notes: *
+  - You can either pass the head poniter as reference or return the new head and assign to head variable
+
 
 ## add_node_end
 *Code Explanation:*
