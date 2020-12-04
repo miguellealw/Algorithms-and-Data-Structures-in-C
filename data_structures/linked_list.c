@@ -17,22 +17,27 @@ int main(void)
 
   Node *head, *current, *node_found, *node_deleted;
 
-  /*printf("\n*****************\n");*/
-  /*printf("Add Head to BEGINNING of List");*/
-  /*printf("\n*****************\n");*/
-  /*head = add_node_begin(NULL, "Head of list", string_arr);*/
-  /*print_list(head, "#%d - Node Printed: %s \n");*/
-
-  // add head of list
-  PRINT_MESSAGE("Add Head to END of List");
-  head = add_node_end(NULL, "Head of list", string_arr);
+  // ------ Test add functions when head is being added ------
+  PRINT_MESSAGE("Add Head to BEGINNING of List");
+  head = add_node_begin(NULL, "Head of list", string_arr);
   print_list(head, "#%d - Node Printed: %s \n");
 
+  /*PRINT_MESSAGE("Add Head to END of List");*/
+  /*head = add_node_end(NULL, "Head of list", string_arr);*/
+  /*print_list(head, "#%d - Node Printed: %s \n");*/
+
+  /*PRINT_MESSAGE("Add Head to IN of List");*/
+  /*head = add_node_in(NULL, 0, "Head of list", string_arr);*/
+  /*print_list(head, "#%d - Node Printed: %s \n");*/
+
+  // ------ Test Delete Functions when head is the only node ------
   /*PRINT_MESSAGE("Delete head with delete_node_in");*/
   /*node_deleted = delete_node_in(&head, 0);*/
+  /*print_list(head, "#%d - Node Printed: %s \n");*/
 
   /*PRINT_MESSAGE("Delete head with delete_node_begin");*/
   /*node_deleted = delete_node_begin(&head);*/
+  /*print_list(head, "#%d - Node Printed: %s \n");*/
 
   /*PRINT_MESSAGE("Delete head with delete_node_end");*/
   /*node_deleted = delete_node_end(&head);*/
@@ -41,6 +46,7 @@ int main(void)
   // add node
   PRINT_MESSAGE("Add to END of List");
   add_node_end(head, "Second node added to end of list.", string_arr);
+  // Uncomment line below and comment line above if delete functions above are tested 
   /*head = add_node_end(head, "Second node added to end of list.", string_arr);*/
   add_node_end(head, string_of_node_to_delete, string_arr_2);
   print_list(head, "#%d - Node Printed: %s \n");
@@ -63,8 +69,6 @@ int main(void)
     printf("Node was not found! find_node function not working properly");
 
   // delete node
-  // TODO: figure out when to delete deleted node from memory
-  /*PRINTF_MESSAGE("Delete Node with ID of 3");*/
   PRINTF_MESSAGE(printf("Delete Node with ID of %d", ID_of_node_to_delete));
   node_deleted = delete_node_in(&head, ID_of_node_to_delete);
   print_list(head, "#%d - Node Printed: %s\n");
@@ -121,7 +125,6 @@ Node *create_node(Node* head, char *some_string, char **double_pointer)
   Node *temp_node = malloc(sizeof(Node));
 
   // Assign ID to node
-  // TODO: figure out how to handle ID's when nodes are added in between and at start of list 
   static long ID = 0;
   temp_node->ID = ID++;
 
@@ -191,16 +194,20 @@ Node *add_node_begin(Node *head, char *some_string, char **double_pointer)
 // The node will be added AFTER the index passed in
 Node *add_node_in(Node *head, unsigned int index, char *some_string, char **double_pointer)
 {
-  // TODO: handle when head is NULL (When list is empty)
 
   // create node
   Node *new_node = create_node(head, some_string, double_pointer);
+
+  // TODO: handle when head is NULL (When list is empty)
+  if(IS_EMPTY(head))
+    return new_node;
 
   // get current node
   Node *current = head;
   // get previous node
   Node *previous = NULL;
 
+  // Go to node at nth index
   index++; 
   while(current->ID != index)
   {
@@ -245,7 +252,6 @@ Node *delete_node_in(Node **head, unsigned int ID)
   Node *current = *head;
   Node *previous = NULL;
 
-  // TODO: check what happens when head is the only node in the list
   while(current->ID != ID)
   {
     // If the end of the list is reached without finding list node
