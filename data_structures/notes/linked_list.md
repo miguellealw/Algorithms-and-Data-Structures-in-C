@@ -11,6 +11,7 @@
 
 * Some Notes: *
   - You can either pass the head poniter as reference or return the new head and assign to head variable
+  - When iterating over list `while(current->next != NULL)` will go up to last node whereas `while(current != NULL)` will go past last node.
 
 
 ## add_node_end
