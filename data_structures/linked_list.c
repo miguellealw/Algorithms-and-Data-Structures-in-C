@@ -13,7 +13,7 @@ int main(void)
   char *some_string_2 = "String 2";
 
   char *string_of_node_to_delete = "Third node added to end of list."; 
-  unsigned int ID_of_node_to_delete = 2;
+  unsigned int ID_of_node_to_delete = 1;
 
   Node *head, *current, *node_found, *node_deleted;
 
@@ -28,19 +28,29 @@ int main(void)
   head = add_node_end(NULL, "Head of list", string_arr);
   print_list(head, "#%d - Node Printed: %s \n");
 
+  /*PRINT_MESSAGE("Delete head with delete_node_in");*/
+  /*node_deleted = delete_node_in(&head, 0);*/
+
+  /*PRINT_MESSAGE("Delete head with delete_node_begin");*/
+  /*node_deleted = delete_node_begin(&head);*/
+
+  PRINT_MESSAGE("Delete head with delete_node_end");
+  node_deleted = delete_node_end(&head);
+  print_list(head, "#%d - Node Printed: %s \n");
+
   // add node
   PRINT_MESSAGE("Add to END of List");
-  add_node_end(head, "Second node added to end of list.", string_arr);
+  head = add_node_end(head, "Second node added to end of list.", string_arr);
   add_node_end(head, string_of_node_to_delete, string_arr_2);
   print_list(head, "#%d - Node Printed: %s \n");
 
-  PRINTF_MESSAGE("Add IN BETWEEN index %d and %d of List", 1, 2);
+  PRINTF_MESSAGE(printf("Add IN BETWEEN index %d and %d of List", 1, 2));
   add_node_in(head, 1, "Node added in between", string_arr);
   print_list(head, "#%d - Node Printed: %s\n");
 
   PRINT_MESSAGE("Add to BEGINNING of List");
-  Node *new_head = add_node_begin(head, "Node added to beginning of list", string_arr_2);
-  print_list(new_head, "#%d - Node Printed: %s\n");
+  head = add_node_begin(head, "Node added to beginning of list", string_arr_2);
+  print_list(head, "#%d - Node Printed: %s\n");
 
   // find node
   PRINT_MESSAGE("Find Node");
@@ -53,17 +63,32 @@ int main(void)
 
   // delete node
   // TODO: figure out when to delete deleted node from memory
-  PRINT_MESSAGE("Delete Node");
-  node_deleted = delete_node(head, ID_of_node_to_delete);
-  printf("Node with string \"%s\" and ID: %d has been deleted\n", node_deleted->some_string, node_deleted->ID);
+  /*PRINTF_MESSAGE("Delete Node with ID of 3");*/
+  PRINTF_MESSAGE(printf("Delete Node with ID of %d", ID_of_node_to_delete));
+  node_deleted = delete_node_in(&head, ID_of_node_to_delete);
+  print_list(head, "#%d - Node Printed: %s\n");
+  if(node_deleted != NULL)
+    free(node_deleted);
 
   // Confirm node has been deleted
   node_found = find_node(head, ID_of_node_to_delete);
   if(node_found == NULL)
   {
     printf("\nConfirming Deletion...\n");
-    printf("Node with string \"%s\" and ID: %d was deleted successfully!\n", string_of_node_to_delete, ID_of_node_to_delete);
+    printf("Node with ID: %d was deleted successfully!\n", ID_of_node_to_delete);
   }
+
+  PRINT_MESSAGE("Delete Head Node");
+  node_deleted = delete_node_begin(&head);
+  print_list(head, "#%d - Node Printed: %s\n");
+  if(node_deleted != NULL)
+    free(node_deleted);
+
+  PRINT_MESSAGE("Delete Last Node");
+  node_deleted = delete_node_end(&head);
+  print_list(head, "#%d - Node Printed: %s\n");
+  if(node_deleted != NULL)
+    free(node_deleted);
 
   // TODO: free linked list from memory
 
@@ -174,15 +199,32 @@ Node *add_node_in(Node *head, unsigned int index, char *some_string, char **doub
   return new_node;
 }
 
-Node *delete_node(Node *head, unsigned int ID)
+Node *delete_node_begin(Node **head)
 {
-  // save pointers to current node and previous node
-  Node *current = head;
-  Node *previous = NULL;
-
-  if(head == NULL)
+  if(IS_EMPTY(*head))
     return NULL;
 
+  // Get reference to current head before being removed
+  Node *deleted_head = *head;
+
+  // assign new head to node after the current head
+  // FIXME: head is not being changed. Figure out if passed by reference.
+  *head = (*head)->next;
+  
+  // return node deleted
+  return deleted_head;
+}
+
+Node *delete_node_in(Node **head, unsigned int ID)
+{
+  if(IS_EMPTY(head))
+    return NULL;
+
+  // save pointers to current node and previous node
+  Node *current = *head;
+  Node *previous = NULL;
+
+  // TODO: check what happens when head is the only node in the list
   while(current->ID != ID)
   {
     // If the end of the list is reached without finding list node
@@ -195,13 +237,40 @@ Node *delete_node(Node *head, unsigned int ID)
     current = current->next;
   }
 
+
   // if a match is found
-  // assign the next pointer of previous node to next pointer of current node
-  previous->next = current->next;
+  // Check if head is node being removed
+  if(previous != NULL)
+    // assign the next pointer of previous node to next pointer of current node
+    previous->next = current->next;
+  else
+    // if head is the node being removed
+    *head = current->next; 
 
-  // TODO: delete current node from memory
-  // free(current);
+  return current;
+}
 
+Node *delete_node_end(Node **head)
+{
+  // get reference of node to delete
+  Node *current = *head;
+  // get reference to previous node
+  Node *previous = NULL;
+
+  // go to end of list 
+  while(current->next != NULL)
+  {
+    previous = current;
+    current = current->next;
+  }
+
+  // assign next pointer of previous node to NULL 
+  if(previous != NULL)
+    previous->next = NULL;
+  else
+    *head = current->next;
+
+  // return deleted node
   return current;
 }
 
@@ -223,6 +292,9 @@ Node *find_node(Node *head, unsigned int ID)
 
 void print_list(Node *head, char* message)
 {
+  if(IS_EMPTY(head))
+    printf("List is Empty.\n");
+
   Node *current = head;
 
   while(current != NULL)
@@ -235,17 +307,20 @@ void print_list(Node *head, char* message)
 
 unsigned int length(Node *head)
 {
-  if(head == NULL)
+  if(IS_EMPTY(head))
     return 0;
 
   Node *current = head;  
   int counter = 0; 
 
-  while(current != NULL)
-  {
-    counter++;    
-    current = current->next;
-  }
+  /*while(current != NULL)*/
+  /*{*/
+    /*counter++;    */
+    /*current = current->next;*/
+  /*}*/
+
+  for(; current != NULL; current = current->next)
+    counter++;
 
   return counter;
 }
