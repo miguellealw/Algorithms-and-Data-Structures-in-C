@@ -34,13 +34,14 @@ int main(void)
   /*PRINT_MESSAGE("Delete head with delete_node_begin");*/
   /*node_deleted = delete_node_begin(&head);*/
 
-  PRINT_MESSAGE("Delete head with delete_node_end");
-  node_deleted = delete_node_end(&head);
-  print_list(head, "#%d - Node Printed: %s \n");
+  /*PRINT_MESSAGE("Delete head with delete_node_end");*/
+  /*node_deleted = delete_node_end(&head);*/
+  /*print_list(head, "#%d - Node Printed: %s \n");*/
 
   // add node
   PRINT_MESSAGE("Add to END of List");
-  head = add_node_end(head, "Second node added to end of list.", string_arr);
+  add_node_end(head, "Second node added to end of list.", string_arr);
+  /*head = add_node_end(head, "Second node added to end of list.", string_arr);*/
   add_node_end(head, string_of_node_to_delete, string_arr_2);
   print_list(head, "#%d - Node Printed: %s \n");
 
@@ -68,7 +69,10 @@ int main(void)
   node_deleted = delete_node_in(&head, ID_of_node_to_delete);
   print_list(head, "#%d - Node Printed: %s\n");
   if(node_deleted != NULL)
+  {
     free(node_deleted);
+    node_deleted = NULL;
+  }
 
   // Confirm node has been deleted
   node_found = find_node(head, ID_of_node_to_delete);
@@ -82,15 +86,32 @@ int main(void)
   node_deleted = delete_node_begin(&head);
   print_list(head, "#%d - Node Printed: %s\n");
   if(node_deleted != NULL)
+  {
     free(node_deleted);
+    node_deleted = NULL;
+  }
 
   PRINT_MESSAGE("Delete Last Node");
   node_deleted = delete_node_end(&head);
   print_list(head, "#%d - Node Printed: %s\n");
   if(node_deleted != NULL)
+  {
     free(node_deleted);
+    node_deleted = NULL;
+  }
+  
 
-  // TODO: free linked list from memory
+  PRINT_MESSAGE("Add to END of List to Delete");
+  add_node_end(head, "Node Added to End of List 1", string_arr);
+  add_node_end(head, "Node Added to End of List 2", string_arr);
+  add_node_end(head, "Node Added to End of List 3", string_arr);
+  add_node_end(head, "Node Added to End of List 4", string_arr);
+  print_list(head, "#%d - Node Printed: %s\n");
+
+  // free linked list from memory
+  PRINT_MESSAGE("Delete Entire List from memory");
+  delete_list(&head);
+  print_list(head, "#%d - Node Printed: %s\n");
 
   return EXIT_SUCCESS;
 }
@@ -101,8 +122,8 @@ Node *create_node(Node* head, char *some_string, char **double_pointer)
 
   // Assign ID to node
   // TODO: figure out how to handle ID's when nodes are added in between and at start of list 
-  unsigned int list_length = length(head);
-  temp_node->ID = list_length;
+  static long ID = 0;
+  temp_node->ID = ID++;
 
   temp_node->some_string = malloc(sizeof(char) * 100);
   temp_node->some_string = some_string;
@@ -305,6 +326,7 @@ void print_list(Node *head, char* message)
 
 }
 
+// FIXME: fix counter issue. Replicated ID's are possible if you delete then add nodes.
 unsigned int length(Node *head)
 {
   if(IS_EMPTY(head))
@@ -313,16 +335,21 @@ unsigned int length(Node *head)
   Node *current = head;  
   int counter = 0; 
 
-  /*while(current != NULL)*/
-  /*{*/
-    /*counter++;    */
-    /*current = current->next;*/
-  /*}*/
-
   for(; current != NULL; current = current->next)
     counter++;
 
   return counter;
 }
 
+void delete_list(Node **head)
+{
+  // Base case: once the end of the list is reached stop recursion
+  if(IS_EMPTY(*head))
+    return;
 
+  delete_list(&((*head)->next));
+  free(*head);
+
+  // set head reference to NULL to confirm it has been deleted
+  *head = NULL;
+}
