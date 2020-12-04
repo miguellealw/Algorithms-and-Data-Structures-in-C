@@ -198,7 +198,6 @@ Node *add_node_in(Node *head, unsigned int index, char *some_string, char **doub
   // create node
   Node *new_node = create_node(head, some_string, double_pointer);
 
-  // TODO: handle when head is NULL (When list is empty)
   if(IS_EMPTY(head))
     return new_node;
 
@@ -332,7 +331,6 @@ void print_list(Node *head, char* message)
 
 }
 
-// FIXME: fix counter issue. Replicated ID's are possible if you delete then add nodes.
 unsigned int length(Node *head)
 {
   if(IS_EMPTY(head))

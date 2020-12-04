@@ -41,5 +41,6 @@ void print_list(Node *head, char *message);
 void delete_list(Node **head);
 
 // TODO: save pointer to head and tail of list
+Node *head, *tail;
 
 #endif
