@@ -25,7 +25,7 @@ int main(void)
     printf("\nWhat is your choice?(q to quit): ");
 
     /*fgets(user_choice, sizeof(user_choice), stdin);*/
-    scanf("%c", &user_choice);
+    scanf(" %c", &user_choice);
     /*strtok(user_choice, " ");*/
     /*if(!strcmp(user_choice, "q") || !strcmp(user_choice, "Q"))*/
     if(user_choice == 'q' || user_choice == 'Q')
