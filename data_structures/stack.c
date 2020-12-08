@@ -3,10 +3,10 @@
 
 #include "stack.h"
 
-int main(void)
+int stack(void)
 {
 
-  printf("Hello, World");
+  printf("\nThis is the stack\n");
 
   return EXIT_SUCCESS;
 }
