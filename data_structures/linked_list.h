@@ -23,6 +23,8 @@ typedef struct Node
   struct Node *next;
 } Node;
 
+int linked_list(void);
+
 // Create Nodes
 Node *add_node_end(Node *head, char *some_string, char **double_pointer);
 Node *add_node_in(Node *head, unsigned int index, char *some_string, char **double_pointer);

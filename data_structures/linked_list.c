@@ -5,7 +5,7 @@
 
 #include "./linked_list.h"
 
-int main(void)
+int linked_list(void)
 {
   char *string_arr[] = {"test1", "test2", "test3"};
   char *string_arr_2[] = {"arr2", "arr3", "arr4"};
